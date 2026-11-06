@@ -1,0 +1,15 @@
+# Java / Maven
+target/
+*.class
+
+# Node
+node_modules/
+dist/
+
+# Configurações locais e segredos
+.env
+application-local.properties
+
+# Sistema e editores
+.DS_Store
+.idea/
