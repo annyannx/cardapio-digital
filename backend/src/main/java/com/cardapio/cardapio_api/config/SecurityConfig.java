@@ -2,6 +2,7 @@ package com.cardapio.cardapio_api.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -12,7 +13,7 @@ import org.springframework.security.web.SecurityFilterChain;
  * Regras de segurança da API.
  *
  * Por enquanto (provisório, até fazermos o login com JWT):
- *  - o cardápio e a documentação Swagger são públicos;
+ *  - o cardápio, o envio de pedidos pelo cliente e a documentação Swagger são públicos;
  *  - todo o resto exige autenticação.
  */
 @Configuration
@@ -32,6 +33,8 @@ public class SecurityConfig {
                                 "/v3/api-docs",
                                 "/v3/api-docs/**")
                         .permitAll()
+                        // O cliente pode enviar pedidos sem login (RF004).
+                        .requestMatchers(HttpMethod.POST, "/api/pedidos").permitAll()
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults());
 
