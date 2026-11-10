@@ -12,10 +12,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+import java.time.Instant;
+
 /**
  * Registro de uma mudança de status de um pedido (RF008): de qual status
- * para qual, e qual usuário fez a mudança (nulo quando o pedido é criado
- * pelo cliente). A data/hora é preenchida pelo banco (alterado_em).
+ * para qual, qual usuário fez a mudança (nulo quando o pedido é criado
+ * pelo cliente) e quando.
  * Representa a tabela "pedido_status_historico" do banco.
  */
 @Entity
@@ -41,6 +43,9 @@ public class PedidoStatusHistorico {
     @Column(name = "usuario_id")
     private Long usuarioId;
 
+    @Column(name = "alterado_em", nullable = false, updatable = false, columnDefinition = "timestamptz")
+    private Instant alteradoEm;
+
     // Exigido pelo JPA.
     protected PedidoStatusHistorico() {
     }
@@ -51,6 +56,7 @@ public class PedidoStatusHistorico {
         this.statusAnterior = statusAnterior;
         this.statusNovo = statusNovo;
         this.usuarioId = usuarioId;
+        this.alteradoEm = Instant.now();
     }
 
     public Long getId() {
@@ -71,5 +77,9 @@ public class PedidoStatusHistorico {
 
     public Long getUsuarioId() {
         return usuarioId;
+    }
+
+    public Instant getAlteradoEm() {
+        return alteradoEm;
     }
 }

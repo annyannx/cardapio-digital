@@ -5,6 +5,7 @@ import com.cardapio.cardapio_api.dto.PedidoDtos.ItemPedidoRequest;
 import com.cardapio.cardapio_api.dto.PedidoDtos.ItemPedidoResponse;
 import com.cardapio.cardapio_api.dto.PedidoDtos.PedidoRequest;
 import com.cardapio.cardapio_api.dto.PedidoDtos.PedidoResponse;
+import com.cardapio.cardapio_api.event.PedidoEventos;
 import com.cardapio.cardapio_api.model.Adicional;
 import com.cardapio.cardapio_api.model.Item;
 import com.cardapio.cardapio_api.model.ItemTamanho;
@@ -15,6 +16,7 @@ import com.cardapio.cardapio_api.model.StatusPedido;
 import com.cardapio.cardapio_api.repository.AdicionalRepository;
 import com.cardapio.cardapio_api.repository.ItemTamanhoRepository;
 import com.cardapio.cardapio_api.repository.PedidoRepository;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +33,9 @@ import java.util.stream.Collectors;
  *
  * Regra de ouro: o cliente envia apenas IDs e quantidades. Nomes e preços
  * são sempre buscados no banco, e o total é calculado aqui no servidor.
+ *
+ * Depois que o pedido é gravado, um evento avisa o painel do administrador
+ * em tempo real (RF007).
  */
 @Service
 public class PedidoService {
@@ -38,13 +43,19 @@ public class PedidoService {
     private final PedidoRepository pedidoRepository;
     private final ItemTamanhoRepository itemTamanhoRepository;
     private final AdicionalRepository adicionalRepository;
+    private final PedidoMapper pedidoMapper;
+    private final ApplicationEventPublisher eventos;
 
     public PedidoService(PedidoRepository pedidoRepository,
                          ItemTamanhoRepository itemTamanhoRepository,
-                         AdicionalRepository adicionalRepository) {
+                         AdicionalRepository adicionalRepository,
+                         PedidoMapper pedidoMapper,
+                         ApplicationEventPublisher eventos) {
         this.pedidoRepository = pedidoRepository;
         this.itemTamanhoRepository = itemTamanhoRepository;
         this.adicionalRepository = adicionalRepository;
+        this.pedidoMapper = pedidoMapper;
+        this.eventos = eventos;
     }
 
     @Transactional
@@ -90,6 +101,10 @@ public class PedidoService {
         pedido.registrarHistorico(null, StatusPedido.RECEBIDO, null);
 
         Pedido salvo = pedidoRepository.save(pedido);
+
+        // Avisa o painel do administrador (o aviso só sai depois que o banco confirmar a gravação).
+        eventos.publishEvent(new PedidoEventos.Criado(pedidoMapper.paraAdminDto(salvo)));
+
         return paraResponse(salvo);
     }
 

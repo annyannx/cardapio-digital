@@ -12,16 +12,13 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Pedido feito pelo cliente. O "id" é o número do pedido exibido ao cliente.
  * Representa a tabela "pedido" do banco.
- *
- * Obs.: as colunas de data/hora (criado_em, atualizado_em) são preenchidas
- * pelo próprio banco (DEFAULT now()). Vamos mapeá-las quando precisarmos
- * exibir a data/hora na lista de pedidos do administrador (RF007).
  */
 @Entity
 @Table(name = "pedido")
@@ -47,6 +44,13 @@ public class Pedido {
     @Column(name = "valor_total", nullable = false, precision = 10, scale = 2)
     private BigDecimal valorTotal;
 
+    // Data/hora de criação e da última alteração (guardadas como timestamptz no banco).
+    @Column(name = "criado_em", nullable = false, updatable = false, columnDefinition = "timestamptz")
+    private Instant criadoEm;
+
+    @Column(name = "atualizado_em", nullable = false, columnDefinition = "timestamptz")
+    private Instant atualizadoEm;
+
     // cascade = ALL: ao salvar o pedido, os itens e o histórico são salvos junto.
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PedidoItem> itens = new ArrayList<>();
@@ -64,6 +68,9 @@ public class Pedido {
         this.observacao = observacao;
         this.status = StatusPedido.RECEBIDO;
         this.valorTotal = BigDecimal.ZERO;
+        Instant agora = Instant.now();
+        this.criadoEm = agora;
+        this.atualizadoEm = agora;
     }
 
     public void adicionarItem(PedidoItem item) {
@@ -78,6 +85,14 @@ public class Pedido {
     /** Registra no histórico uma mudança de status (anterior é nulo na criação). */
     public void registrarHistorico(StatusPedido anterior, StatusPedido novo, Long usuarioId) {
         historico.add(new PedidoStatusHistorico(this, anterior, novo, usuarioId));
+    }
+
+    /** Muda o status do pedido e registra quem mudou e quando (RF008). */
+    public void alterarStatus(StatusPedido novo, Long usuarioId) {
+        StatusPedido anterior = this.status;
+        this.status = novo;
+        this.atualizadoEm = Instant.now();
+        registrarHistorico(anterior, novo, usuarioId);
     }
 
     public Long getId() {
@@ -102,6 +117,14 @@ public class Pedido {
 
     public BigDecimal getValorTotal() {
         return valorTotal;
+    }
+
+    public Instant getCriadoEm() {
+        return criadoEm;
+    }
+
+    public Instant getAtualizadoEm() {
+        return atualizadoEm;
     }
 
     public List<PedidoItem> getItens() {
