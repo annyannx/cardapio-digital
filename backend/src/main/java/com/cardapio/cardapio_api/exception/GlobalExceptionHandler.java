@@ -6,6 +6,9 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -39,5 +42,26 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErroResponse> tratarJsonInvalido(HttpMessageNotReadableException ex) {
         return ResponseEntity.badRequest().body(
                 new ErroResponse(400, "JSON inválido ou campo com tipo incorreto", List.of()));
+    }
+
+    /** Parâmetro de URL com tipo errado (ex.: /itens/abc quando o id deveria ser número). */
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErroResponse> tratarParametroInvalido(MethodArgumentTypeMismatchException ex) {
+        return ResponseEntity.badRequest().body(
+                new ErroResponse(400, "Parâmetro inválido: " + ex.getName(), List.of()));
+    }
+
+    /** Upload sem o campo "arquivo". */
+    @ExceptionHandler(MissingServletRequestPartException.class)
+    public ResponseEntity<ErroResponse> tratarArquivoAusente(MissingServletRequestPartException ex) {
+        return ResponseEntity.badRequest().body(
+                new ErroResponse(400, "Envie o arquivo no campo 'arquivo'", List.of()));
+    }
+
+    /** Upload maior que o limite configurado. */
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<ErroResponse> tratarArquivoGrande(MaxUploadSizeExceededException ex) {
+        return ResponseEntity.status(413).body(
+                new ErroResponse(413, "Arquivo muito grande (máximo de 5 MB)", List.of()));
     }
 }

@@ -26,6 +26,7 @@ import java.util.List;
  *
  * Públicas (sem login):
  *  - consulta do cardápio (GET /api/cardapio/**);
+ *  - imagens guardadas na pasta local (GET /uploads/**);
  *  - envio de pedidos pelo cliente (POST /api/pedidos);
  *  - login (POST /api/auth/login);
  *  - documentação Swagger.
@@ -50,6 +51,7 @@ public class SecurityConfig {
                 .sessionManagement(sessao -> sessao.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.GET, "/api/cardapio", "/api/cardapio/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/uploads/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/pedidos").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                         .requestMatchers(

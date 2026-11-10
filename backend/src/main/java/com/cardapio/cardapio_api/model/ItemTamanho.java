@@ -11,6 +11,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * Tamanho/variação de um item, com seu preço.
@@ -40,6 +41,27 @@ public class ItemTamanho {
 
     // Exigido pelo JPA.
     protected ItemTamanho() {
+    }
+
+    public ItemTamanho(String nome, BigDecimal preco, int ordem) {
+        this.nome = nome;
+        this.preco = arredondar(preco);
+        this.ordem = ordem;
+    }
+
+    /** Altera preço e posição de um tamanho existente. */
+    public void atualizar(BigDecimal preco, int ordem) {
+        this.preco = arredondar(preco);
+        this.ordem = ordem;
+    }
+
+    // Visível só dentro do pacote "model" (quem chama é o Item).
+    void setItem(Item item) {
+        this.item = item;
+    }
+
+    private static BigDecimal arredondar(BigDecimal valor) {
+        return valor.setScale(2, RoundingMode.HALF_UP);
     }
 
     public Long getId() {
