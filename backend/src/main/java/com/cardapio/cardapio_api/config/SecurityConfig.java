@@ -29,6 +29,7 @@ import java.util.List;
  *  - imagens guardadas na pasta local (GET /uploads/**);
  *  - envio de pedidos pelo cliente (POST /api/pedidos);
  *  - acompanhamento de um pedido pelo número (GET /api/pedidos/**);
+ *  - confirmação de recebimento pelo cliente (POST /api/pedidos/{numero}/confirmar-recebimento);
  *  - login (POST /api/auth/login);
  *  - documentação Swagger.
  *
@@ -54,6 +55,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/cardapio", "/api/cardapio/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/uploads/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/pedidos").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/pedidos/*/confirmar-recebimento").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/pedidos/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                         .requestMatchers(

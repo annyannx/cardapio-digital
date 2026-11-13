@@ -1,0 +1,15 @@
+/* Confirmação de recebimento do cliente, no cartão do pedido (painel do admin) */
+
+.pedido__confirmacao {
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: #fff3cd;
+  color: #664d03;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.pedido__confirmacao--ok {
+  background: #e6f4ea;
+  color: #1b5e20;
+}

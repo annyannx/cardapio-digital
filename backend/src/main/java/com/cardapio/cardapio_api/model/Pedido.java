@@ -51,6 +51,10 @@ public class Pedido {
     @Column(name = "atualizado_em", nullable = false, columnDefinition = "timestamptz")
     private Instant atualizadoEm;
 
+    // Quando o cliente confirmou que recebeu o pedido (nulo enquanto não confirmar).
+    @Column(name = "confirmado_em", columnDefinition = "timestamptz")
+    private Instant confirmadoEm;
+
     // cascade = ALL: ao salvar o pedido, os itens e o histórico são salvos junto.
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PedidoItem> itens = new ArrayList<>();
@@ -95,6 +99,17 @@ public class Pedido {
         registrarHistorico(anterior, novo, usuarioId);
     }
 
+    /**
+     * O cliente confirma que recebeu o pedido (só faz sentido depois de ENTREGUE;
+     * quem chama confere o status). Confirmar duas vezes não muda nada.
+     */
+    public void confirmarRecebimento() {
+        if (this.confirmadoEm == null) {
+            this.confirmadoEm = Instant.now();
+            this.atualizadoEm = this.confirmadoEm;
+        }
+    }
+
     public Long getId() {
         return id;
     }
@@ -125,6 +140,10 @@ public class Pedido {
 
     public Instant getAtualizadoEm() {
         return atualizadoEm;
+    }
+
+    public Instant getConfirmadoEm() {
+        return confirmadoEm;
     }
 
     public List<PedidoItem> getItens() {

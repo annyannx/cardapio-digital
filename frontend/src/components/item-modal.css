@@ -1,0 +1,135 @@
+/* ==========================================================
+   Janela de detalhes do item
+   - texto em preto/quase preto (sem cinza apagado);
+   - o título fica SOBRE a foto, com uma camada escura translúcida
+     por baixo, para ler bem mesmo em fotos claras;
+   - ao rolar, só o conteúdo rola: o botão de adicionar fica fixo embaixo.
+   ========================================================== */
+
+/* Cinza mais escuro em todo o site (descrições, legendas...). */
+:root {
+  --texto-suave: #3b3b3b;
+}
+
+.modal--item .modal__rolagem {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* ---------- foto + título ---------- */
+
+.modal--item .modal__hero {
+  position: relative;
+  height: 250px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #ffe9c7;
+}
+
+.modal--item .modal__hero img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.modal--item .modal__hero .item-card__icone {
+  font-size: 5rem;
+  margin-bottom: 40px;
+}
+
+/* A camada translúcida: escurece a parte de baixo da foto, onde fica o título. */
+.modal--item .modal__hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.85) 0%,
+    rgba(0, 0, 0, 0.6) 35%,
+    rgba(0, 0, 0, 0.15) 70%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  pointer-events: none;
+}
+
+.modal--item .modal__hero-texto {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  padding: 16px 18px;
+  color: #fff;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+}
+
+.modal--item .modal__categoria {
+  color: rgba(255, 255, 255, 0.95);
+  font-weight: 700;
+}
+
+.modal--item .modal__titulo {
+  color: #fff;
+  font-size: 1.6rem;
+  line-height: 1.2;
+}
+
+/* ---------- conteúdo (fundo branco, texto preto) ---------- */
+
+.modal--item .modal__corpo {
+  flex: none;
+  overflow: visible;
+  color: #111;
+}
+
+.modal--item .modal__texto {
+  color: #151515;
+  font-size: 1.02rem;
+  line-height: 1.5;
+}
+
+.modal--item .modal__texto strong {
+  color: #000;
+}
+
+.modal--item .opcoes legend {
+  color: #000;
+  font-size: 1.05rem;
+}
+
+.modal--item .opcao__nome {
+  color: #111;
+  font-weight: 600;
+}
+
+.modal--item .opcao__preco {
+  color: var(--vermelho-escuro);
+}
+
+.modal--item .campo span {
+  color: #111;
+}
+
+.modal--item .campo textarea {
+  color: #111;
+}
+
+/* Barra fixa embaixo (quantidade + adicionar), sempre visível ao rolar. */
+.modal--item .modal__rodape {
+  box-shadow: 0 -6px 14px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 560px) {
+  .modal--item .modal__hero {
+    height: 210px;
+  }
+
+  .modal--item .modal__titulo {
+    font-size: 1.4rem;
+  }
+}

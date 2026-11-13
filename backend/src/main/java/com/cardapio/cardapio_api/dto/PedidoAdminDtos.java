@@ -50,6 +50,7 @@ public final class PedidoAdminDtos {
             BigDecimal valorTotal,
             String criadoEm,
             String atualizadoEm,
+            @Schema(description = "Quando o cliente confirmou o recebimento (vazio se ainda não confirmou)") String confirmadoEm,
             List<ItemPedidoResponse> itens,
             List<HistoricoDto> historico) {
     }
@@ -69,6 +70,7 @@ public final class PedidoAdminDtos {
             BigDecimal valorTotal,
             String criadoEm,
             String atualizadoEm,
+            @Schema(description = "Quando o cliente confirmou o recebimento (vazio se ainda não confirmou)") String confirmadoEm,
             List<HistoricoPublicoDto> historico) {
     }
 }

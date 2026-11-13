@@ -95,7 +95,8 @@ CREATE TABLE pedido (
                   CHECK (status IN ('RECEBIDO', 'EM_PREPARO', 'PRONTO', 'ENTREGUE')),
     valor_total   NUMERIC(10,2) NOT NULL CHECK (valor_total >= 0),
     criado_em     TIMESTAMPTZ   NOT NULL DEFAULT now(),
-    atualizado_em TIMESTAMPTZ   NOT NULL DEFAULT now()
+    atualizado_em TIMESTAMPTZ   NOT NULL DEFAULT now(),
+    confirmado_em TIMESTAMPTZ                         -- quando o cliente confirmou o recebimento (RF008)
 );
 
 -- Os itens do pedido guardam uma "foto" (nome e preço no momento da compra).

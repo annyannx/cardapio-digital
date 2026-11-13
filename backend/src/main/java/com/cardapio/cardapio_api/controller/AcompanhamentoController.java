@@ -13,13 +13,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 /**
- * Rotas públicas para o cliente acompanhar o seu pedido pelo número.
- * Mostram só o status e as etapas (nenhum dado pessoal).
+ * Rotas públicas para o cliente acompanhar o seu pedido pelo número
+ * e confirmar que o recebeu. Mostram só o status e as etapas (nenhum dado pessoal).
  */
 @RestController
 @RequestMapping("/api/pedidos")
@@ -47,9 +48,26 @@ public class AcompanhamentoController {
         return acompanhamentoService.buscar(numero);
     }
 
+    @PostMapping("/{numero}/confirmar-recebimento")
+    @Operation(summary = "Confirma que o cliente recebeu o pedido",
+            description = "Só é possível depois que o pedido foi marcado como ENTREGUE. "
+                    + "O painel do administrador é avisado em tempo real. "
+                    + "Confirmar mais de uma vez não causa erro.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Recebimento confirmado"),
+            @ApiResponse(responseCode = "400", description = "O pedido ainda não foi entregue",
+                    content = @Content(schema = @Schema(implementation = ErroResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Pedido não encontrado",
+                    content = @Content(schema = @Schema(implementation = ErroResponse.class)))
+    })
+    public AcompanhamentoDto confirmarRecebimento(@PathVariable("numero") Long numero) {
+        return acompanhamentoService.confirmarRecebimento(numero);
+    }
+
     @GetMapping(value = "/{numero}/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     @Operation(summary = "Tempo real: acompanha o pedido (SSE)",
-            description = "Mantém a conexão aberta e envia o evento 'status' sempre que o status do pedido mudar. "
+            description = "Mantém a conexão aberta e envia o evento 'status' sempre que o status do pedido mudar "
+                    + "ou o recebimento for confirmado. "
                     + "Não use o 'Try it out' do Swagger para esta rota: ela não termina.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Conexão aberta"),

@@ -63,6 +63,7 @@ public class PedidoMapper {
                 pedido.getValorTotal(),
                 formatar(pedido.getCriadoEm()),
                 formatar(pedido.getAtualizadoEm()),
+                formatar(pedido.getConfirmadoEm()),
                 itens,
                 historico);
     }
@@ -79,6 +80,7 @@ public class PedidoMapper {
                 pedido.getValorTotal(),
                 formatar(pedido.getCriadoEm()),
                 formatar(pedido.getAtualizadoEm()),
+                formatar(pedido.getConfirmadoEm()),
                 historico);
     }
 
