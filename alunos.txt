@@ -1,0 +1,17 @@
+PRÁTICA EXTENSIONISTA VII - CARDÁPIO DIGITAL
+Universidade de Ribeirão Preto - Engenharia da Computação
+
+INTEGRANTES (nome - código do aluno)
+1. [NOME COMPLETO] - [CÓDIGO]
+2. [NOME COMPLETO] - [CÓDIGO]
+3. [NOME COMPLETO] - [CÓDIGO]
+4. [NOME COMPLETO] - [CÓDIGO]
+5. [NOME COMPLETO] - [CÓDIGO]
+
+(apague as linhas que não forem usadas)
+
+REPOSITÓRIO NO GITHUB
+https://github.com/SEU-USUARIO/cardapio-digital
+
+VÍDEO DE DEMONSTRAÇÃO
+[COLE AQUI O LINK DO VÍDEO]

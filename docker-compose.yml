@@ -1,0 +1,26 @@
+# PostgreSQL pronto para o Cardápio Digital (opcional).
+#
+# Uso:    docker compose up -d
+# Resulta em um banco "cardapio_digital" (usuário postgres, senha postgres),
+# com o schema e o cardápio de exemplo já carregados na primeira vez.
+# Depois, ligue o backend com:  DB_PASSWORD=postgres
+#
+# Para apagar tudo e começar do zero:  docker compose down -v
+services:
+  db:
+    image: postgres:17
+    container_name: cardapio-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: cardapio_digital
+    ports:
+      - "5432:5432"
+    volumes:
+      - cardapio-dados:/var/lib/postgresql/data
+      # Os arquivos abaixo rodam automaticamente, em ordem, só na primeira criação do banco.
+      - ./backend/database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./backend/database/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
+
+volumes:
+  cardapio-dados:
