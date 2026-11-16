@@ -1,5 +1,7 @@
 package com.cardapio.cardapio_api.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -37,6 +39,7 @@ import java.util.regex.Pattern;
 @Service
 public class ImagemService {
 
+    private static final Logger log = LoggerFactory.getLogger(ImagemService.class);
     private static final long TAMANHO_MAXIMO_BYTES = 5L * 1024 * 1024;
     private static final Pattern NOME_VALIDO = Pattern.compile("^[a-f0-9\\-]{36}\\.(jpg|png|webp)$");
     private static final Pattern SECURE_URL = Pattern.compile("\"secure_url\"\\s*:\\s*\"([^\"]+)\"");
@@ -56,6 +59,19 @@ public class ImagemService {
         this.uploadPreset = uploadPreset == null ? "" : uploadPreset.trim();
         this.pastaLocal = pastaLocal;
         this.urlPublica = urlPublica.endsWith("/") ? urlPublica.substring(0, urlPublica.length() - 1) : urlPublica;
+
+        if (usaCloudinary()) {
+            log.info("IMAGENS: usando o CLOUDINARY (nuvem). cloud name e preset estão definidos.");
+        } else {
+            log.info("IMAGENS: usando a PASTA LOCAL '{}'. Cloudinary NÃO configurado (cloud name: {}, preset: {}).",
+                    this.pastaLocal,
+                    this.cloudName.isEmpty() ? "VAZIO" : "definido",
+                    this.uploadPreset.isEmpty() ? "VAZIO" : "definido");
+        }
+    }
+
+    private boolean usaCloudinary() {
+        return !cloudName.isEmpty() && !uploadPreset.isEmpty();
     }
 
     /** Dados de uma imagem lida da pasta local. */
@@ -81,10 +97,14 @@ public class ImagemService {
 
         String extensao = detectarExtensao(bytes);
 
-        if (!cloudName.isEmpty() && !uploadPreset.isEmpty()) {
-            return enviarParaCloudinary(bytes, extensao);
+        if (usaCloudinary()) {
+            String url = enviarParaCloudinary(bytes, extensao);
+            log.info("IMAGENS: foto enviada ao Cloudinary -> {}", url);
+            return url;
         }
-        return salvarLocal(bytes, extensao);
+        String url = salvarLocal(bytes, extensao);
+        log.info("IMAGENS: foto salva na pasta local -> {}", url);
+        return url;
     }
 
     /** Lê uma imagem salva na pasta local (usado pela rota pública /uploads/{nome}). */
@@ -134,7 +154,7 @@ public class ImagemService {
 
         ByteArrayOutputStream corpo = new ByteArrayOutputStream();
         escreverCampo(corpo, limite, "upload_preset", uploadPreset);
-        escreverArquivo(corpo, limite, "file", "imagem." + extensao, tipoMime(extensao), bytes);
+        escreverArquivo(corpo, limite, "file", UUID.randomUUID() + "." + extensao, tipoMime(extensao), bytes);
         corpo.writeBytes(("--" + limite + "--\r\n").getBytes(StandardCharsets.UTF_8));
 
         HttpRequest requisicao = HttpRequest.newBuilder(

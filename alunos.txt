@@ -1,17 +1,8 @@
 PRÁTICA EXTENSIONISTA VII - CARDÁPIO DIGITAL
 Universidade de Ribeirão Preto - Engenharia da Computação
 
-INTEGRANTES (nome - código do aluno)
-1. [NOME COMPLETO] - [CÓDIGO]
-2. [NOME COMPLETO] - [CÓDIGO]
-3. [NOME COMPLETO] - [CÓDIGO]
-4. [NOME COMPLETO] - [CÓDIGO]
-5. [NOME COMPLETO] - [CÓDIGO]
-
-(apague as linhas que não forem usadas)
+DESENVOLVEDORA (nome - código do aluno)
+Anny Karoline Cardoso Azevedo - 841885
 
 REPOSITÓRIO NO GITHUB
-https://github.com/SEU-USUARIO/cardapio-digital
-
-VÍDEO DE DEMONSTRAÇÃO
-[COLE AQUI O LINK DO VÍDEO]
+https://github.com/annyannx/cardapio-digital

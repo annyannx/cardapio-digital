@@ -47,7 +47,7 @@ Aplicação web distribuída que funciona como um **Cardápio Digital**: o clien
 ### 1. Baixar o projeto
 
 ```bash
-git clone https://github.com/SEU-USUARIO/cardapio-digital.git
+git clone https://github.com/annyannx/cardapio-digital.git
 cd cardapio-digital
 ```
 
@@ -203,6 +203,6 @@ Por padrão, as fotos enviadas pelo painel ficam na pasta `backend/uploads` (ign
 - **Porta 8080 ou 5173 ocupada:** feche o outro programa que a usa.
 - **O site mostra "Não foi possível conectar ao servidor":** o backend não está ligado, ou a URL do site não está em `CORS_ORIGENS`.
 
-## Equipe
+## Desenvolvedora
 
 Veja o arquivo [`alunos.txt`](alunos.txt).
