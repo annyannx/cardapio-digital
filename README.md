@@ -75,6 +75,8 @@ docker compose up -d
 
 Isso cria um PostgreSQL já com o schema e o seed carregados (usuário `postgres`, senha `postgres`, banco `cardapio_digital`). Use `postgres` como senha no próximo passo. Se a porta 5432 já estiver ocupada por outro PostgreSQL, pare-o antes.
 
+Caminho para acesso (inclusão) das imagens do cardápio - psql -U postgres -d cardapio_digital -f backend/database/seed-imagens.sql
+
 ### 3. Ligar o backend (API)
 
 ```bash
@@ -206,3 +208,12 @@ Por padrão, as fotos enviadas pelo painel ficam na pasta `backend/uploads` (ign
 ## Desenvolvedora
 
 Veja o arquivo [`alunos.txt`](alunos.txt).
+
+
+## Fotos do cardápio no banco
+
+As fotos dos itens ficam guardadas no Cloudinary. Depois do `seed.sql`, rode o `seed-imagens.sql` para ligar cada item à sua foto:
+
+    psql -U postgres -d cardapio_digital -f backend/database/seed-imagens.sql
+
+Com Docker (`docker compose up -d`), esse arquivo já é carregado automaticamente. Para ver as fotos não é preciso configurar o Cloudinary: os endereços são públicos.

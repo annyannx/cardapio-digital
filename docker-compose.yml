@@ -2,7 +2,7 @@
 #
 # Uso:    docker compose up -d
 # Resulta em um banco "cardapio_digital" (usuário postgres, senha postgres),
-# com o schema e o cardápio de exemplo já carregados na primeira vez.
+# com o schema, o cardápio de exemplo e as fotos já carregados na primeira vez.
 # Depois, ligue o backend com:  DB_PASSWORD=postgres
 #
 # Para apagar tudo e começar do zero:  docker compose down -v
@@ -21,6 +21,8 @@ services:
       # Os arquivos abaixo rodam automaticamente, em ordem, só na primeira criação do banco.
       - ./backend/database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
       - ./backend/database/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
+      # Fotos dos itens (Cloudinary). Gere este arquivo antes, com o comando do README.
+      - ./backend/database/seed-imagens.sql:/docker-entrypoint-initdb.d/03-imagens.sql:ro
 
 volumes:
   cardapio-dados:
