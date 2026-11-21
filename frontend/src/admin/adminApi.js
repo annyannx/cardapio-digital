@@ -128,6 +128,24 @@ export function enviarImagem(token, arquivo) {
   return requisitar('/api/admin/imagens', { metodo: 'POST', token, formData })
 }
 
+// ---------- opcionais (adicionais) ----------
+
+export function listarAdicionaisAdmin(token) {
+  return requisitar('/api/admin/adicionais', { token })
+}
+
+export function criarAdicionalAdmin(token, dados) {
+  return requisitar('/api/admin/adicionais', { metodo: 'POST', token, corpo: dados })
+}
+
+export function atualizarAdicionalAdmin(token, id, dados) {
+  return requisitar(`/api/admin/adicionais/${id}`, { metodo: 'PUT', token, corpo: dados })
+}
+
+export function removerAdicionalAdmin(token, id) {
+  return requisitar(`/api/admin/adicionais/${id}`, { metodo: 'DELETE', token })
+}
+
 // ---------- tempo real (SSE com cabeçalho Authorization) ----------
 
 /**

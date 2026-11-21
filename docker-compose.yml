@@ -23,6 +23,8 @@ services:
       - ./backend/database/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
       # Fotos dos itens (Cloudinary). Gere este arquivo antes, com o comando do README.
       - ./backend/database/seed-imagens.sql:/docker-entrypoint-initdb.d/03-imagens.sql:ro
+      # Precos reais do cardapio. Gere este arquivo antes, com o comando do README.
+      - ./backend/database/seed-precos.sql:/docker-entrypoint-initdb.d/04-precos.sql:ro
 
 volumes:
   cardapio-dados:

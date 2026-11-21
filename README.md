@@ -217,3 +217,12 @@ As fotos dos itens ficam guardadas no Cloudinary. Depois do `seed.sql`, rode o `
     psql -U postgres -d cardapio_digital -f backend/database/seed-imagens.sql
 
 Com Docker (`docker compose up -d`), esse arquivo já é carregado automaticamente. Para ver as fotos não é preciso configurar o Cloudinary: os endereços são públicos.
+
+
+## Preços reais do cardápio
+
+Depois do `seed.sql` e do `seed-imagens.sql`, rode o `seed-precos.sql`, que troca os preços fictícios pelos preços reais (inclusive dos opcionais):
+
+    psql -U postgres -d cardapio_digital -f backend/database/seed-precos.sql
+
+Com Docker (`docker compose up -d`), esse arquivo já é carregado automaticamente.

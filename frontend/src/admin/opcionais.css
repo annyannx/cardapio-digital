@@ -1,0 +1,78 @@
+/* Opcionais (painel do administrador) */
+
+.opcionais__ajuda {
+  margin-bottom: 14px;
+  color: var(--texto-suave);
+  font-size: 0.92rem;
+}
+
+.opcionais {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.opc {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  box-shadow: var(--sombra);
+}
+
+.opc--alterado {
+  border-color: var(--amarelo);
+  box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.45);
+}
+
+.opc--inativo {
+  background: #f1ece6;
+}
+
+.opc__linha {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.opc__nome {
+  flex: 1 1 260px;
+}
+
+.opc__preco {
+  flex: 0 0 150px;
+}
+
+.opc__linha--rodape {
+  align-items: center;
+  justify-content: space-between;
+}
+
+.opc__categorias,
+.opc__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+}
+
+.opc__rotulo {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.opc__acoes .botao {
+  padding: 7px 16px;
+}
+
+@media (max-width: 640px) {
+  .opc__preco {
+    flex: 1 1 100%;
+  }
+}

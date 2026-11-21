@@ -5,6 +5,7 @@ import { buscarMe } from './adminApi'
 import { AdminProvider, useAdmin } from './AdminContext'
 import ItensPage from './ItensPage'
 import LoginPage from './LoginPage'
+import OpcionaisPage from './OpcionaisPage'
 import PedidosPage from './PedidosPage'
 
 function AdminConteudo({ rota }) {
@@ -47,7 +48,11 @@ function AdminConteudo({ rota }) {
     return <div className="estado">Verificando sessão...</div>
   }
 
-  const naAbaCardapio = rota.startsWith('/admin/itens')
+  const aba = rota.startsWith('/admin/itens')
+    ? 'itens'
+    : rota.startsWith('/admin/opcionais')
+      ? 'opcionais'
+      : 'pedidos'
 
   return (
     <div className="admin">
@@ -61,11 +66,14 @@ function AdminConteudo({ rota }) {
         </div>
 
         <nav className="admin__nav" aria-label="Menu do painel">
-          <a href="#/admin/pedidos" className={naAbaCardapio ? '' : 'admin__link--ativo'}>
+          <a href="#/admin/pedidos" className={aba === 'pedidos' ? 'admin__link--ativo' : ''}>
             Pedidos
           </a>
-          <a href="#/admin/itens" className={naAbaCardapio ? 'admin__link--ativo' : ''}>
+          <a href="#/admin/itens" className={aba === 'itens' ? 'admin__link--ativo' : ''}>
             Cardápio
+          </a>
+          <a href="#/admin/opcionais" className={aba === 'opcionais' ? 'admin__link--ativo' : ''}>
+            Opcionais
           </a>
         </nav>
 
@@ -80,7 +88,9 @@ function AdminConteudo({ rota }) {
         </div>
       </header>
 
-      <main className="admin__conteudo">{naAbaCardapio ? <ItensPage /> : <PedidosPage />}</main>
+      <main className="admin__conteudo">
+        {aba === 'itens' ? <ItensPage /> : aba === 'opcionais' ? <OpcionaisPage /> : <PedidosPage />}
+      </main>
     </div>
   )
 }

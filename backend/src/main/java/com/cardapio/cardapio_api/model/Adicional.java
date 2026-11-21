@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * Opcional/adicional que o cliente pode acrescentar (Catupiry, Bacon, Champignon...).
@@ -32,6 +33,17 @@ public class Adicional {
 
     // Exigido pelo JPA.
     protected Adicional() {
+    }
+
+    public Adicional(String nome, BigDecimal preco, boolean ativo) {
+        atualizar(nome, preco, ativo);
+    }
+
+    /** Altera os dados do opcional (usado na criação e na edição pelo painel). */
+    public void atualizar(String nome, BigDecimal preco, boolean ativo) {
+        this.nome = nome;
+        this.preco = preco.setScale(2, RoundingMode.HALF_UP);
+        this.ativo = ativo;
     }
 
     public Long getId() {
